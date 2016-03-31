@@ -1,2 +1,1 @@
-# xLog
-Log File Viewer
+# xPdf

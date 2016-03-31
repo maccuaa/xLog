@@ -1,0 +1,27 @@
+body {
+    padding-top: 50px;
+}
+
+#filename {
+    background-color: #FFFFFF;
+}
+
+#logLines {
+    padding: 0;
+}
+
+.monospace {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+}
+
+#alert {
+    position: fixed;
+    top: 60px;
+    width: 80%;
+    margin-left: -40%;
+    left: 50% ;
+}
+
+#status {
+    color: green;
+}

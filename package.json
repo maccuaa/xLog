@@ -1,0 +1,17 @@
+{
+  "name": "xLog",
+  "version": "0.1.0",
+  "main": "main.js",
+  "author": "Andrew MacCuaig",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "chokidar": "^1.4.3",
+    "font-awesome": "^4.5.0",
+    "jquery": "^2.2.0",
+    "tail": "^0.4.0",
+    "vue": "^1.0.16"
+  }
+}

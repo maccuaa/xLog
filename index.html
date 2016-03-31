@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>xLog</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
+    <body>
+        <div id="app">
+            <!-- Navbar -->
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+
+                    <form class="navbar-form navbar-left">
+
+                        <!-- Open File Controls -->
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-history"></i>&nbsp;<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-header">Recent files</li>
+                                    <li v-for="file in recentFiles">
+                                        <a href="#" v-on:click="watchFile(file)">{{ file }}</a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="#" v-on:click.stop="clearHistory"><i class="fa fa-trash-o"></i>&nbsp;Clear history</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input id="filename" type="text" class="form-control" placeholder="{{ filename }}" readonly />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" v-on:click="openDialog">
+                                    <i class="fa fa-folder-open"></i> Open
+                                </button>
+                            </span>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="btn-group">
+                                <!-- Start / Resume watching log file -->
+                                 <button class="btn btn-default" v-on:click="startWatch" v-bind:disabled="isWatching">
+                                    <i class="fa fa-play"></i>
+                                </button>
+                                <!-- Stop / Close log file -->
+                                <button class="btn btn-default" v-on:click="stopWatch" v-bind:disabled="!isWatching">
+                                    <i class="fa fa-stop"></i>
+                                </button>
+                                <!-- Clear log lines -->
+                                <button class="btn btn-default" v-on:click="clearLogLines">
+                                    <i class="fa fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="navbar-form navbar-right" role="search">
+                        <!-- Search Controls -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search..." v-model="searchQuery">
+                            <span id="searchNav" class="input-group-btn">
+                                <button class="btn btn-default" type="button" disabled="disabled">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <button class="btn btn-default" type="button" disabled="disable">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+                            </span>
+                        </div>
+
+                        <!-- Settings cog -->
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"  type="button">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu" >
+                                    <li class="dropdown-header">Settings</li>
+
+                                    <!-- Autoscroll -->
+                                    <li>
+                                        <a href="#" v-on:click.stop="toggleAutoscroll">
+                                            <i class="fa fa-fw" v-bind:class="autoScroll ? 'fa-check-square-o' : 'fa-square-o'"></i> Autoscroll
+                                        </a>
+                                    </li>
+
+                                    <li class="dropdown-header">Search Settings</li>
+                                    <li>
+                                        <a href="#" v-on:click.stop="toggleFilterSearchResults">
+                                            <i class="fa fa-fw" v-bind:class="filterSearchResults ? 'fa-check-square-o' : 'fa-square-o'"></i> Filter Results
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" v-on:click.stop="toggleSearchMatchCase">
+                                            <i class="fa fa-fw" v-bind:class="searchMatchCase ? 'fa-check-square-o' : 'fa-square-o'"></i> Match Case
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+            <!-- Main -->
+            <div id="logLines" class="container-fluid">
+                <table class="table table-striped table-hover">
+                    <tbody>
+                        <tr v-for="line in logLines | xFilterBy searchQuery filterSearchResults | highlight searchQuery">
+                            <td class="monospace" v-bind:class="line.highlight ? 'bg-success': ''">{{ line.message }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Alert -->
+            <div id="alert" class="alert alert-danger alert-dismissible collapse" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ errorMessage }}
+            </div>
+
+        </div>
+
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="node_modules/vue/dist/vue.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
